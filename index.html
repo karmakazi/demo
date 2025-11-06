@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support Wizard – Prototype</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --panel: #ffffff;
+      --ink: #1b1f24;
+      --muted: #5a6472;
+      --line: #e6e7ea;
+      --accent: #2b7a78;
+      --accent-2: #def2f1;
+      --focus: #1b9aaa;
+      --danger: #b00020;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, system-ui, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--bg), #f4f6f8);
+    }
+
+    .wrap { max-width: 920px; margin: 0 auto; padding: 24px; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      padding: 12px 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      inline-size: 38px; block-size: 38px; border-radius: 8px;
+      background: radial-gradient(circle at 30% 30%, var(--accent-2), #cfe9e7 60%, #bfe1de 100%);
+      border: 1px solid var(--line);
+    }
+    .brand h1 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: .25px; }
+    .tag { color: var(--muted); font-size: 14px; }
+
+    .progress {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 16px;
+    }
+    .dot { height: 6px; border-radius: 999px; background: #dfe3e8; }
+    .dot.is-active { background: var(--accent); }
+
+    main { margin-top: 24px; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.04);
+      overflow: clip;
+    }
+
+    .step { display: none; padding: 24px; }
+    .step.is-current { display: block; }
+
+    .step h2 { margin: 0 0 6px; font-size: 24px; font-weight: 600; }
+    .lead { color: var(--muted); margin: 0 0 18px; }
+
+    fieldset { border: 0; margin: 0; padding: 0; }
+    .group { display: grid; gap: 12px; margin: 16px 0 18px; }
+
+    .choice {
+      display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start;
+      padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff;
+    }
+    .choice:hover { border-color: var(--accent); }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 720px) { .row { grid-template-columns: 1fr; } }
+
+    label { font-weight: 600; font-size: 14px; }
+    .help { color: var(--muted); font-size: 14px; }
+
+    select, input[type="text"], input[type="search"], textarea {
+      width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line);
+      font-size: 15px; background: #fff;
+    }
+
+    .toolbar { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 16px; border-top: 1px solid var(--line); background: #fff; }
+    .toolbar .side { display: flex; gap: 12px; align-items: center; }
+
+    .btn {
+      appearance: none; border: 1px solid var(--line); background: #fff; color: var(--ink);
+      padding: 10px 14px; border-radius: 12px; font-size: 15px; cursor: pointer;
+    }
+    .btn:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+    .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn.ghost { background: transparent; }
+    .btn.danger { background: #fff; color: var(--danger); border-color: #ffd7de; }
+    .btn[disabled] { opacity: .6; cursor: not-allowed; }
+
+    .notice { background: var(--accent-2); padding: 12px 14px; border-radius: 10px; border: 1px solid #cfe1e0; font-size: 14px; }
+
+    .results {
+      display: grid; gap: 16px; grid-template-columns: 2fr 1fr;
+    }
+    @media (max-width: 1000px) { .results { grid-template-columns: 1fr; } }
+    .card { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: #fff; }
+    .card h3 { margin: 0 0 10px; font-size: 18px; }
+    .small { font-size: 13px; color: var(--muted); }
+    .list { margin: 0; padding-left: 18px; }
+
+    .kicker { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; color: var(--muted); }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    [aria-live] { min-height: 1em; }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="application" aria-label="Support Wizard Prototype">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Support Wizard</h1>
+          <div class="tag">A gentle, step-by-step way to find end-of-life information</div>
+        </div>
+      </div>
+      <div style="min-width:220px;">
+        <div class="kicker" id="progressLabel" aria-live="polite">Step 1 of 7</div>
+        <div class="progress" aria-hidden="true">
+          <div class="dot is-active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="panel" id="wizard" aria-live="polite">
+        <!-- Step 1: Welcome -->
+        <section class="step is-current" id="step-1" data-step="1" tabindex="-1">
+          <h2>We’re here to help you understand your options</h2>
+          <p class="lead">This short guide will ask a few simple questions and then create a personal page with practical information for your situation. You can stop at any time. Your answers are private and stay on this device.</p>
+          <div class="notice">Content here is placeholder for the prototype. Replace with approved copy and policy disclaimers.</div>
+        </section>
+
+        <!-- Step 2: Who for -->
+        <section class="step" id="step-2" data-step="2" tabindex="-1">
+          <h2>I need support as…</h2>
+          <fieldset class="group" aria-describedby="whoHelp">
+            <legend class="sr-only">Select who you’re seeking support for</legend>
+            <div id="whoHelp" class="help">Choose the option that best fits you right now.</div>
+            <label class="choice"><input type="radio" name="who" value="self"/> <div><div>Me</div><div class="help">I am exploring options for myself.</div></div></label>
+            <label class="choice"><input type="radio" name="who" value="family"/> <div><div>A family member or loved one</div><div class="help">I’m helping someone close to me.</div></div></label>
+            <label class="choice"><input type="radio" name="who" value="professional"/> <div><div>Someone I care for professionally</div><div class="help">I am a healthcare worker, caregiver, or volunteer.</div></div></label>
+          </fieldset>
+        </section>
+
+        <!-- Step 3: Location -->
+        <section class="step" id="step-3" data-step="3" tabindex="-1">
+          <h2>Where are you located?</h2>
+          <p class="lead">This helps tailor information and forms for your province or territory.</p>
+          <div class="row">
+            <div>
+              <label for="province">Province or territory</label>
+              <select id="province">
+                <option value="">Select…</option>
+                <option>Alberta</option>
+                <option>British Columbia</option>
+                <option>Manitoba</option>
+                <option>New Brunswick</option>
+                <option>Newfoundland and Labrador</option>
+                <option>Nova Scotia</option>
+                <option>Ontario</option>
+                <option>Prince Edward Island</option>
+                <option>Quebec</option>
+                <option>Saskatchewan</option>
+                <option>Northwest Territories</option>
+                <option>Nunavut</option>
+                <option>Yukon</option>
+              </select>
+              <div class="help">If unsure, you can skip. We’ll show national information.</div>
+            </div>
+            <div>
+              <label for="postal">Postal code (optional)</label>
+              <input id="postal" type="text" inputmode="text" placeholder="e.g., M5V 2T6" />
+              <div class="help">Used to surface local support options.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 4: Situation -->
+        <section class="step" id="step-4" data-step="4" tabindex="-1">
+          <h2>What brings you here today?</h2>
+          <fieldset class="group">
+            <legend class="sr-only">Choose your focus</legend>
+            <label class="choice"><input type="radio" name="phase" value="exploring"/> <div><div>I’m exploring my options</div><div class="help">I want to understand MAID and other supports.</div></div></label>
+            <label class="choice"><input type="radio" name="phase" value="in-process"/> <div><div>I’m already in the process</div><div class="help">I’m talking with a provider or considering forms.</div></div></label>
+            <label class="choice"><input type="radio" name="phase" value="supporting"/> <div><div>I’m supporting someone else</div><div class="help">I need guidance for a loved one or client.</div></div></label>
+          </fieldset>
+
+          <div class="group">
+            <label>Other supports you want to learn about</label>
+            <label class="choice"><input type="checkbox" name="supports" value="palliative"/> <div><div>Palliative care</div><div class="help">Comfort-focused care to improve quality of life.</div></div></label>
+            <label class="choice"><input type="checkbox" name="supports" value="advance"/> <div><div>Advance care planning</div><div class="help">Document your wishes and talk with loved ones.</div></div></label>
+            <label class="choice"><input type="checkbox" name="supports" value="grief"/> <div><div>Grief and family support</div><div class="help">Counselling, peer groups, and resources.</div></div></label>
+          </div>
+        </section>
+
+        <!-- Step 5: Eligibility (self-check) -->
+        <section class="step" id="step-5" data-step="5" tabindex="-1">
+          <h2>Quick self-check</h2>
+          <p class="lead">This is not an assessment. It explains common requirements in plain language.</p>
+          <div class="group">
+            <label class="choice"><input type="checkbox" name="elig" value="healthcare"/> <div><div>I am eligible for publicly funded healthcare in Canada</div><div class="help">Required to access MAID, details vary by province.</div></div></label>
+            <label class="choice"><input type="checkbox" name="elig" value="capacity"/> <div><div>I can make and communicate health decisions</div><div class="help">Capacity is determined by a clinician.</div></div></label>
+            <label class="choice"><input type="checkbox" name="elig" value="condition"/> <div><div>I have a serious illness, disease, or disability</div><div class="help">Often called a grievous and irremediable condition.</div></div></label>
+            <label class="choice"><input type="checkbox" name="elig" value="foreseeable"/> <div><div>My natural death may be reasonably foreseeable</div><div class="help">If yes, some process steps may differ.</div></div></label>
+          </div>
+          <div class="notice small">Replace with jurisdiction-approved wording and links to official sources.</div>
+        </section>
+
+        <!-- Step 6: Values (optional) -->
+        <section class="step" id="step-6" data-step="6" tabindex="-1">
+          <h2>What matters most to you right now?</h2>
+          <fieldset class="group">
+            <legend class="sr-only">Select your priorities</legend>
+            <label class="choice"><input type="checkbox" name="values" value="comfort"/> <div><div>Comfort and relief</div><div class="help">Managing symptoms and minimizing distress.</div></div></label>
+            <label class="choice"><input type="checkbox" name="values" value="autonomy"/> <div><div>Autonomy and control</div><div class="help">Understanding choices and making your own decisions.</div></div></label>
+            <label class="choice"><input type="checkbox" name="values" value="time"/> <div><div>Time with loved ones</div><div class="help">Planning moments that matter.</div></div></label>
+            <label class="choice"><input type="checkbox" name="values" value="spiritual"/> <div><div>Spiritual or emotional peace</div><div class="help">Access to counselling, chaplaincy, or cultural supports.</div></div></label>
+          </fieldset>
+          <div class="group">
+            <label for="notes">Anything you want to add (optional)</label>
+            <textarea id="notes" rows="3" placeholder="Add notes for your personal summary"></textarea>
+          </div>
+        </section>
+
+        <!-- Step 7: Results -->
+        <section class="step" id="step-7" data-step="7" tabindex="-1">
+          <h2>Your personal information page</h2>
+          <p class="lead">Save or print this page and discuss it with your family or healthcare provider.</p>
+
+          <div class="results" id="results">
+            <article class="card" id="summaryCard">
+              <h3>Summary</h3>
+              <div id="summaryText"></div>
+            </article>
+
+            <aside class="card">
+              <h3>Actions</h3>
+              <div class="group">
+                <button class="btn" id="btnPrint" type="button">Print</button>
+                <button class="btn" id="btnSave" type="button">Save as PDF</button>
+                <button class="btn ghost" id="btnRestart" type="button">Start over</button>
+              </div>
+              <p class="small">Data stays in your browser in this prototype.</p>
+            </aside>
+
+            <article class="card" id="eligCard">
+              <h3>Eligibility overview</h3>
+              <ul class="list" id="eligList"></ul>
+              <p class="small">This is information only and not a clinical assessment.</p>
+            </article>
+
+            <article class="card" id="formsCard">
+              <h3>Forms and documents</h3>
+              <ul class="list" id="formsList"></ul>
+            </article>
+
+            <article class="card" id="supportsCard">
+              <h3>Additional support</h3>
+              <ul class="list" id="supportList"></ul>
+            </article>
+
+            <article class="card" id="valuesCard">
+              <h3>Your priorities</h3>
+              <ul class="list" id="valuesList"></ul>
+              <div id="userNotes" class="small"></div>
+            </article>
+          </div>
+        </section>
+
+        <div class="toolbar" role="group" aria-label="Wizard navigation">
+          <div class="side">
+            <button class="btn" id="backBtn" type="button">Back</button>
+          </div>
+          <div class="side">
+            <button class="btn ghost" id="skipBtn" type="button">Skip</button>
+            <button class="btn primary" id="nextBtn" type="button">Next</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    const steps = Array.from(document.querySelectorAll('.step'));
+    const dots = Array.from(document.querySelectorAll('.dot'));
+    const progressLabel = document.getElementById('progressLabel');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const skipBtn = document.getElementById('skipBtn');
+
+    const state = {
+      step: 1,
+      who: '',
+      province: '',
+      postal: '',
+      phase: '',
+      supports: [],
+      elig: [],
+      values: [],
+      notes: ''
+    };
+
+    function setStep(n) {
+      state.step = Math.min(Math.max(n, 1), steps.length);
+      steps.forEach((s) => s.classList.remove('is-current'));
+      const current = document.querySelector(`#step-${state.step}`);
+      current.classList.add('is-current');
+      current.focus();
+      dots.forEach((d, i) => d.classList.toggle('is-active', i < state.step));
+      progressLabel.textContent = `Step ${state.step} of ${steps.length}`;
+      backBtn.disabled = state.step === 1;
+      nextBtn.textContent = state.step === steps.length ? 'Finish' : 'Next';
+      skipBtn.style.visibility = state.step === steps.length ? 'hidden' : 'visible';
+    }
+
+    function gather() {
+      state.who = document.querySelector('input[name="who"]:checked')?.value || state.who;
+      state.province = document.getElementById('province').value || state.province;
+      state.postal = document.getElementById('postal').value.trim();
+      state.phase = document.querySelector('input[name="phase"]:checked')?.value || state.phase;
+      state.supports = Array.from(document.querySelectorAll('input[name="supports"]:checked')).map(x => x.value);
+      state.elig = Array.from(document.querySelectorAll('input[name="elig"]:checked')).map(x => x.value);
+      state.values = Array.from(document.querySelectorAll('input[name="values"]:checked')).map(x => x.value);
+      state.notes = document.getElementById('notes').value.trim();
+    }
+
+    function validate(step) {
+      // Light-touch required fields
+      if (step === 2 && !document.querySelector('input[name="who"]:checked')) return false;
+      if (step === 4 && !document.querySelector('input[name="phase"]:checked')) return false;
+      return true;
+    }
+
+    function buildResults() {
+      const parts = [];
+      const whoLabel = { self: 'you', family: 'your loved one', professional: 'the person you support' }[state.who] || 'you';
+      const where = state.province || 'Canada';
+      const focus = {
+        'exploring': 'are exploring your options',
+        'in-process': 'are already in the process',
+        'supporting': 'are supporting someone else'
+      }[state.phase] || 'are seeking information';
+
+      parts.push(`You ${focus} in ${where}. This page brings together plain-language information, next steps, and support.`);
+
+      if (state.supports.length) {
+        const map = { palliative: 'palliative care', advance: 'advance care planning', grief: 'grief and family support' };
+        parts.push(`You also asked about ${state.supports.map(s => map[s]).join(', ')}.`);
+      }
+
+      document.getElementById('summaryText').textContent = parts.join(' ');
+
+      // Eligibility list
+      const eligMap = {
+        healthcare: 'Eligible for publicly funded healthcare',
+        capacity: 'Able to make and communicate health decisions',
+        condition: 'Living with a serious illness, disease, or disability',
+        foreseeable: 'Natural death may be reasonably foreseeable'
+      };
+      const eligList = document.getElementById('eligList');
+      eligList.innerHTML = '';
+      if (state.elig.length) {
+        state.elig.forEach(k => {
+          const li = document.createElement('li');
+          li.textContent = eligMap[k];
+          eligList.appendChild(li);
+        });
+      } else {
+        const li = document.createElement('li');
+        li.textContent = 'No items selected in the self-check. A clinician can discuss eligibility with you.';
+        eligList.appendChild(li);
+      }
+
+      // Forms and documents (placeholder; in production this is province-driven)
+      const formsList = document.getElementById('formsList');
+      formsList.innerHTML = '';
+      const p = state.province || 'Your province';
+      ;[
+        `${p} MAID request form (link placeholder)`,
+        `${p} Independent witness information (link placeholder)`,
+        `Advance care planning kit (national resource placeholder)`
+      ].forEach(txt => { const li = document.createElement('li'); li.textContent = txt; formsList.appendChild(li); });
+
+      // Supports
+      const supportList = document.getElementById('supportList');
+      supportList.innerHTML = '';
+      const allSupports = [];
+      if (state.supports.includes('palliative')) allSupports.push('Palliative care overview and how to access services');
+      if (state.supports.includes('advance')) allSupports.push('Advance care planning: guides and conversation templates');
+      if (state.supports.includes('grief')) allSupports.push('Grief supports: counselling and peer groups');
+      if (!allSupports.length) allSupports.push('Local hospice and palliative resources (directory placeholder)');
+      allSupports.forEach(txt => { const li = document.createElement('li'); li.textContent = txt; supportList.appendChild(li); });
+
+      // Values
+      const valuesList = document.getElementById('valuesList');
+      valuesList.innerHTML = '';
+      const valMap = { comfort: 'Comfort and relief', autonomy: 'Autonomy and control', time: 'Time with loved ones', spiritual: 'Spiritual or emotional peace' };
+      if (state.values.length) {
+        state.values.forEach(k => { const li = document.createElement('li'); li.textContent = valMap[k]; valuesList.appendChild(li); });
+      } else {
+        const li = document.createElement('li'); li.textContent = 'No priorities selected'; valuesList.appendChild(li);
+      }
+      document.getElementById('userNotes').textContent = state.notes ? `Notes: ${state.notes}` : '';
+    }
+
+    nextBtn.addEventListener('click', () => {
+      gather();
+      if (!validate(state.step)) { nextBtn.focus(); return; }
+      if (state.step < steps.length) {
+        setStep(state.step + 1);
+        if (state.step === steps.length) buildResults();
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      setStep(state.step - 1);
+    });
+
+    skipBtn.addEventListener('click', () => {
+      setStep(state.step + 1);
+      if (state.step === steps.length) buildResults();
+    });
+
+    document.getElementById('btnPrint').addEventListener('click', () => window.print());
+    document.getElementById('btnSave').addEventListener('click', () => window.print()); // in browsers, print can save to PDF
+    document.getElementById('btnRestart').addEventListener('click', () => { location.reload(); });
+
+    // Initialize
+    setStep(1);
+  </script>
+</body>
+</html>
