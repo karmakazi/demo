@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Support Wizard – Prototype</title>
+  <title>End-of-Life Choice Guide – Prototype</title>
   <style>
     :root {
       --bg: #fafafa;
@@ -41,7 +41,7 @@
     .tag { color: var(--muted); font-size: 14px; }
 
     .progress {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 16px;
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 16px;
     }
     .dot { height: 6px; border-radius: 999px; background: #dfe3e8; }
     .dot.is-active { background: var(--accent); }
@@ -77,7 +77,7 @@
     label { font-weight: 600; font-size: 14px; }
     .help { color: var(--muted); font-size: 14px; }
 
-    select, input[type="text"], input[type="search"], textarea {
+    select, input[type="text"], textarea {
       width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line);
       font-size: 15px; background: #fff;
     }
@@ -92,15 +92,11 @@
     .btn:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
     .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .btn.ghost { background: transparent; }
-    .btn.danger { background: #fff; color: var(--danger); border-color: #ffd7de; }
     .btn[disabled] { opacity: .6; cursor: not-allowed; }
 
     .notice { background: var(--accent-2); padding: 12px 14px; border-radius: 10px; border: 1px solid #cfe1e0; font-size: 14px; }
 
-    .results {
-      display: grid; gap: 16px; grid-template-columns: 2fr 1fr;
-    }
-    @media (max-width: 1000px) { .results { grid-template-columns: 1fr; } }
+    .results { display: grid; gap: 16px; }
     .card { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: #fff; }
     .card h3 { margin: 0 0 10px; font-size: 18px; }
     .small { font-size: 13px; color: var(--muted); }
@@ -113,20 +109,19 @@
   </style>
 </head>
 <body>
-  <div class="wrap" role="application" aria-label="Support Wizard Prototype">
+  <div class="wrap" role="application" aria-label="End-of-Life Choice Guide prototype">
     <header>
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
         <div>
-          <h1>Support Wizard</h1>
-          <div class="tag">A gentle, step-by-step way to find end-of-life information</div>
+          <h1>End-of-Life Choice Guide</h1>
+          <div class="tag">Info and tools for confident decisions in a few easy clicks</div>
         </div>
       </div>
       <div style="min-width:220px;">
-        <div class="kicker" id="progressLabel" aria-live="polite">Step 1 of 7</div>
+        <div class="kicker" id="progressLabel" aria-live="polite">Step 1 of 6</div>
         <div class="progress" aria-hidden="true">
           <div class="dot is-active"></div>
-          <div class="dot"></div>
           <div class="dot"></div>
           <div class="dot"></div>
           <div class="dot"></div>
@@ -140,32 +135,64 @@
       <div class="panel" id="wizard" aria-live="polite">
         <!-- Step 1: Welcome -->
         <section class="step is-current" id="step-1" data-step="1" tabindex="-1">
-          <h2>We’re here to help you understand your options</h2>
-          <p class="lead">This short guide will ask a few simple questions and then create a personal page with practical information for your situation. You can stop at any time. Your answers are private and stay on this device.</p>
-          <div class="notice">Content here is placeholder for the prototype. Replace with approved copy and policy disclaimers.</div>
+          <h2>Need information or support for end-of-life decisions? Let us help.</h2>
+          <p class="lead">Answer a few short questions and we’ll create a personalized page with information that fits your situation. You can save it, share it with others, and revisit it anytime.</p>
+          <div class="group">
+            <div class="notice">Your responses are private and will not be saved on this website.</div>
+            <div>
+              <p class="help" style="margin-bottom:4px; font-weight:600;">If you are in distress</p>
+              <p class="help" style="margin-top:0;">Please contact Crisis Services at 1-833-456-4566 or <a href="#" target="_blank" rel="noreferrer">click here</a> to find immediate support near you.</p>
+            </div>
+          </div>
         </section>
 
         <!-- Step 2: Who for -->
         <section class="step" id="step-2" data-step="2" tabindex="-1">
-          <h2>I need support as…</h2>
+          <h2>I need information for…</h2>
           <fieldset class="group" aria-describedby="whoHelp">
-            <legend class="sr-only">Select who you’re seeking support for</legend>
+            <legend class="sr-only">Select who you’re seeking information for</legend>
             <div id="whoHelp" class="help">Choose the option that best fits you right now.</div>
-            <label class="choice"><input type="radio" name="who" value="self"/> <div><div>Me</div><div class="help">I am exploring options for myself.</div></div></label>
-            <label class="choice"><input type="radio" name="who" value="family"/> <div><div>A family member or loved one</div><div class="help">I’m helping someone close to me.</div></div></label>
-            <label class="choice"><input type="radio" name="who" value="professional"/> <div><div>Someone I care for professionally</div><div class="help">I am a healthcare worker, caregiver, or volunteer.</div></div></label>
+            <label class="choice"><input type="radio" name="who" value="self"/> <div><div>Myself</div><div class="help">I’m exploring options.</div></div></label>
+            <label class="choice"><input type="radio" name="who" value="family"/> <div><div>Someone close to me</div><div class="help">I’m supporting a spouse, partner, family member or loved one.</div></div></label>
+            <label class="choice"><input type="radio" name="who" value="professional"/> <div><div>Someone I support professionally</div><div class="help">I’m a healthcare or allied services professional, service provider or volunteer.</div></div></label>
           </fieldset>
         </section>
 
-        <!-- Step 3: Location -->
+        <!-- Step 3: What brings you here -->
         <section class="step" id="step-3" data-step="3" tabindex="-1">
-          <h2>Where are you located?</h2>
-          <p class="lead">This helps tailor information and forms for your province or territory.</p>
+          <h2>What brings you here today?</h2>
+          <fieldset class="group">
+            <legend class="sr-only">Choose your main focus</legend>
+            <label class="choice"><input type="radio" name="phase" value="learn"/> <div><div>I want to learn about MAID</div><div class="help">I want to understand MAID and other options.</div></div></label>
+            <label class="choice"><input type="radio" name="phase" value="considering"/> <div><div>I’m considering MAID</div><div class="help">I want help getting an assessment, finding a witness, or locating forms.</div></div></label>
+            <label class="choice"><input type="radio" name="phase" value="caregiver"/> <div><div>I’m a primary caregiver</div><div class="help">I need guidance to help me support my loved one.</div></div></label>
+            <label class="choice"><input type="radio" name="phase" value="supporting"/> <div><div>I’m supporting someone else</div><div class="help">I need resources to help a patient, client or someone else.</div></div></label>
+          </fieldset>
+
+          <div class="group">
+            <label>Other topics you want to learn about</label>
+            <label class="choice"><input type="checkbox" name="supports" value="endoflife"/> <div><div>End-of-life care</div><div class="help">Understanding hospice, palliative care and comfort-focused options.</div></div></label>
+            <label class="choice"><input type="checkbox" name="supports" value="advance"/> <div><div>Advance planning</div><div class="help">Guidance for documenting your wishes and communicating with loved ones.</div></div></label>
+            <label class="choice"><input type="checkbox" name="supports" value="grief"/> <div><div>Support for grief, caregivers and families</div><div class="help">Connect with counselling, peer groups and other resources.</div></div></label>
+          </div>
+        </section>
+
+        <!-- Step 4: Coverage and location -->
+        <section class="step" id="step-4" data-step="4" tabindex="-1">
+          <h2>Are you or the person you’re supporting covered by Canada’s healthcare system? </h2>
+          <p class="lead">In Canada, you must be eligible for publicly funded health services to qualify for access to medical assistance in dying.</p>
+
+          <fieldset class="group">
+            <legend class="sr-only">Healthcare coverage</legend>
+            <label class="choice"><input type="radio" name="coverage" value="yes"/> <div><div>Yes</div><div class="help">I’d like information specific to my provincial or territorial healthcare system.</div></div></label>
+            <label class="choice"><input type="radio" name="coverage" value="no"/> <div><div>No</div><div class="help">I’m looking for general information and resources.</div></div></label>
+          </fieldset>
+
           <div class="row">
             <div>
               <label for="province">Province or territory</label>
               <select id="province">
-                <option value="">Select…</option>
+                <option value="">Prefer not to say</option>
                 <option>Alberta</option>
                 <option>British Columbia</option>
                 <option>Manitoba</option>
@@ -180,104 +207,119 @@
                 <option>Nunavut</option>
                 <option>Yukon</option>
               </select>
-              <div class="help">If unsure, you can skip. We’ll show national information.</div>
+              <div class="help">If you prefer not to say, we’ll show national information instead.</div>
             </div>
             <div>
               <label for="postal">Postal code (optional)</label>
-              <input id="postal" type="text" inputmode="text" placeholder="e.g., M5V 2T6" />
-              <div class="help">Used to surface local support options.</div>
+              <input id="postal" type="text" placeholder="e.g., M5V 2T6" />
+              <div class="help">Used to surface local support options. This information remains private and is not stored.</div>
             </div>
           </div>
         </section>
 
-        <!-- Step 4: Situation -->
-        <section class="step" id="step-4" data-step="4" tabindex="-1">
-          <h2>What brings you here today?</h2>
-          <fieldset class="group">
-            <legend class="sr-only">Choose your focus</legend>
-            <label class="choice"><input type="radio" name="phase" value="exploring"/> <div><div>I’m exploring my options</div><div class="help">I want to understand MAID and other supports.</div></div></label>
-            <label class="choice"><input type="radio" name="phase" value="in-process"/> <div><div>I’m already in the process</div><div class="help">I’m talking with a provider or considering forms.</div></div></label>
-            <label class="choice"><input type="radio" name="phase" value="supporting"/> <div><div>I’m supporting someone else</div><div class="help">I need guidance for a loved one or client.</div></div></label>
-          </fieldset>
-
-          <div class="group">
-            <label>Other supports you want to learn about</label>
-            <label class="choice"><input type="checkbox" name="supports" value="palliative"/> <div><div>Palliative care</div><div class="help">Comfort-focused care to improve quality of life.</div></div></label>
-            <label class="choice"><input type="checkbox" name="supports" value="advance"/> <div><div>Advance care planning</div><div class="help">Document your wishes and talk with loved ones.</div></div></label>
-            <label class="choice"><input type="checkbox" name="supports" value="grief"/> <div><div>Grief and family support</div><div class="help">Counselling, peer groups, and resources.</div></div></label>
-          </div>
-        </section>
-
-        <!-- Step 5: Eligibility (self-check) -->
+        <!-- Step 5: Priorities -->
         <section class="step" id="step-5" data-step="5" tabindex="-1">
-          <h2>Quick self-check</h2>
-          <p class="lead">This is not an assessment. It explains common requirements in plain language.</p>
-          <div class="group">
-            <label class="choice"><input type="checkbox" name="elig" value="healthcare"/> <div><div>I am eligible for publicly funded healthcare in Canada</div><div class="help">Required to access MAID, details vary by province.</div></div></label>
-            <label class="choice"><input type="checkbox" name="elig" value="capacity"/> <div><div>I can make and communicate health decisions</div><div class="help">Capacity is determined by a clinician.</div></div></label>
-            <label class="choice"><input type="checkbox" name="elig" value="condition"/> <div><div>I have a serious illness, disease, or disability</div><div class="help">Often called a grievous and irremediable condition.</div></div></label>
-            <label class="choice"><input type="checkbox" name="elig" value="foreseeable"/> <div><div>My natural death may be reasonably foreseeable</div><div class="help">If yes, some process steps may differ.</div></div></label>
-          </div>
-          <div class="notice small">Replace with jurisdiction-approved wording and links to official sources.</div>
-        </section>
-
-        <!-- Step 6: Values (optional) -->
-        <section class="step" id="step-6" data-step="6" tabindex="-1">
           <h2>What matters most to you right now?</h2>
           <fieldset class="group">
             <legend class="sr-only">Select your priorities</legend>
-            <label class="choice"><input type="checkbox" name="values" value="comfort"/> <div><div>Comfort and relief</div><div class="help">Managing symptoms and minimizing distress.</div></div></label>
-            <label class="choice"><input type="checkbox" name="values" value="autonomy"/> <div><div>Autonomy and control</div><div class="help">Understanding choices and making your own decisions.</div></div></label>
-            <label class="choice"><input type="checkbox" name="values" value="time"/> <div><div>Time with loved ones</div><div class="help">Planning moments that matter.</div></div></label>
-            <label class="choice"><input type="checkbox" name="values" value="spiritual"/> <div><div>Spiritual or emotional peace</div><div class="help">Access to counselling, chaplaincy, or cultural supports.</div></div></label>
+            <label class="choice"><input type="checkbox" name="values" value="autonomy"/> <div><div>Autonomy and control</div><div class="help">Understanding choices and making my own decisions.</div></div></label>
+            <label class="choice"><input type="checkbox" name="values" value="comfort"/> <div><div>Comfort and relief</div><div class="help">Managing pain and minimizing distress.</div></div></label>
+            <label class="choice"><input type="checkbox" name="values" value="time"/> <div><div>Time with loved ones</div><div class="help">Enjoying moments that matter.</div></div></label>
+            <label class="choice"><input type="checkbox" name="values" value="peace"/> <div><div>Peace of mind</div><div class="help">Access to emotional, spiritual or cultural support.</div></div></label>
           </fieldset>
           <div class="group">
-            <label for="notes">Anything you want to add (optional)</label>
-            <textarea id="notes" rows="3" placeholder="Add notes for your personal summary"></textarea>
+            <label for="notes">Anything you’d like to add? (optional)</label>
+            <textarea id="notes" rows="3" placeholder="This will be included in your personal summary."></textarea>
           </div>
         </section>
 
-        <!-- Step 7: Results -->
-        <section class="step" id="step-7" data-step="7" tabindex="-1">
-          <h2>Your personal information page</h2>
-          <p class="lead">Save or print this page and discuss it with your family or healthcare provider.</p>
+        <!-- Step 6: Results -->
+        <section class="step" id="step-6" data-step="6" tabindex="-1">
+          <h2>Your End-of-Life Care Choice Guide</h2>
+          <p class="lead">Based on your responses, this page includes links to information, tools and resources that may be the most helpful to you right now.</p>
 
-          <div class="results" id="results">
-            <article class="card" id="summaryCard">
-              <h3>Summary</h3>
-              <div id="summaryText"></div>
+          <div class="results">
+            <article class="card" id="toldCard">
+              <h3>What you told us</h3>
+              <div id="toldText" class="small"></div>
             </article>
 
-            <aside class="card">
-              <h3>Actions</h3>
-              <div class="group">
-                <button class="btn" id="btnPrint" type="button">Print</button>
-                <button class="btn" id="btnSave" type="button">Save as PDF</button>
-                <button class="btn ghost" id="btnRestart" type="button">Start over</button>
-              </div>
-              <p class="small">Data stays in your browser in this prototype.</p>
-            </aside>
-
-            <article class="card" id="eligCard">
-              <h3>Eligibility overview</h3>
-              <ul class="list" id="eligList"></ul>
-              <p class="small">This is information only and not a clinical assessment.</p>
+            <article class="card" id="lookingCard">
+              <h3>You’re looking for</h3>
+              <ul class="list" id="lookingList"></ul>
             </article>
 
-            <article class="card" id="formsCard">
-              <h3>Forms and documents</h3>
-              <ul class="list" id="formsList"></ul>
-            </article>
-
-            <article class="card" id="supportsCard">
-              <h3>Additional support</h3>
-              <ul class="list" id="supportList"></ul>
-            </article>
-
-            <article class="card" id="valuesCard">
+            <article class="card" id="prioritiesCard">
               <h3>Your priorities</h3>
               <ul class="list" id="valuesList"></ul>
               <div id="userNotes" class="small"></div>
+            </article>
+
+            <article class="card">
+              <h3>Find what you need?</h3>
+              <div class="group">
+                <button class="btn" id="btnSave" type="button">Save</button>
+                <button class="btn" id="btnPrint" type="button">Print</button>
+                <button class="btn ghost" id="btnRestart" type="button">Start over</button>
+              </div>
+              <p class="small">This information will be stored in your browser, but not on our website.</p>
+            </article>
+
+            <article class="card">
+              <h3>Top resources for you</h3>
+              <ul class="list" id="resourcesList">
+                <li>End-of-life care options</li>
+                <li>How MAID works</li>
+                <li>Things to consider</li>
+                <li>Feelings about MAID</li>
+                <li>Supporting a dying person</li>
+                <li>Tasks for substitute decision-makers</li>
+                <li>The final days</li>
+                <li>Are you burning out? How to find support</li>
+                <li>Ontario support directory: grief, bereavement, palliative care and other resources</li>
+                <li>Ontario MAID requests</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>Forms</h3>
+              <ul class="list" id="formsList">
+                <li>MAID request form (PDF)</li>
+                <li>Clinician Aid D-1 Final Waiver of Consent (PDF)</li>
+                <li>Clinician Aid D-2 Advance Consent – Self-Administration</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>Links</h3>
+              <ul class="list" id="linksList">
+                <li>Provincial MAID team</li>
+                <li>Find an independent witness</li>
+                <li>Government of Ontario: MAID and end-of-life decisions</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>Featured stories</h3>
+              <ul class="list" id="storiesList">
+                <li>Choosing the day for MAID</li>
+                <li>How Jan chose MAID – and then changed her mind</li>
+                <li>Family conversations about MAID</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>Contact Dying with Dignity Canada</h3>
+              <p class="small">We can answer general questions about MAID or help with navigation support.</p>
+              <ul class="list">
+                <li>Email: support@dyingwithdignity.ca</li>
+                <li>Toll-free: 1-866-286-4023</li>
+                <li>TTY: 1-844-953-3350</li>
+              </ul>
+            </article>
+
+            <article class="card small" style="text-align:center;">
+              <div>WeCanChoose.ca by Dying With Dignity Canada</div>
             </article>
           </div>
         </section>
@@ -307,11 +349,11 @@
     const state = {
       step: 1,
       who: '',
-      province: '',
-      postal: '',
       phase: '',
       supports: [],
-      elig: [],
+      coverage: '',
+      province: '',
+      postal: '',
       values: [],
       notes: ''
     };
@@ -331,92 +373,108 @@
 
     function gather() {
       state.who = document.querySelector('input[name="who"]:checked')?.value || state.who;
-      state.province = document.getElementById('province').value || state.province;
-      state.postal = document.getElementById('postal').value.trim();
       state.phase = document.querySelector('input[name="phase"]:checked')?.value || state.phase;
       state.supports = Array.from(document.querySelectorAll('input[name="supports"]:checked')).map(x => x.value);
-      state.elig = Array.from(document.querySelectorAll('input[name="elig"]:checked')).map(x => x.value);
+      state.coverage = document.querySelector('input[name="coverage"]:checked')?.value || state.coverage;
+      state.province = document.getElementById('province').value || state.province;
+      state.postal = document.getElementById('postal').value.trim();
       state.values = Array.from(document.querySelectorAll('input[name="values"]:checked')).map(x => x.value);
       state.notes = document.getElementById('notes').value.trim();
     }
 
     function validate(step) {
-      // Light-touch required fields
       if (step === 2 && !document.querySelector('input[name="who"]:checked')) return false;
-      if (step === 4 && !document.querySelector('input[name="phase"]:checked')) return false;
+      if (step === 3 && !document.querySelector('input[name="phase"]:checked')) return false;
       return true;
     }
 
     function buildResults() {
-      const parts = [];
-      const whoLabel = { self: 'you', family: 'your loved one', professional: 'the person you support' }[state.who] || 'you';
-      const where = state.province || 'Canada';
-      const focus = {
-        'exploring': 'are exploring your options',
-        'in-process': 'are already in the process',
-        'supporting': 'are supporting someone else'
-      }[state.phase] || 'are seeking information';
+      const whoMap = {
+        self: 'for yourself',
+        family: 'for someone close to you',
+        professional: 'for someone you support professionally'
+      };
+      const phaseMap = {
+        learn: 'You want to understand MAID and other options.',
+        considering: 'You are considering MAID and need help with assessments, witnesses, or forms.',
+        caregiver: 'You are a primary caregiver and need guidance to support a loved one.',
+        supporting: 'You are supporting a patient, client, or someone else and need resources.'
+      };
 
-      parts.push(`You ${focus} in ${where}. This page brings together plain-language information, next steps, and support.`);
+      const where = state.province && state.province !== '' ? state.province : 'Canada';
+      const whoText = whoMap[state.who] || 'for your situation';
+      const phaseText = phaseMap[state.phase] || 'You are seeking information about end-of-life options.';
 
-      if (state.supports.length) {
-        const map = { palliative: 'palliative care', advance: 'advance care planning', grief: 'grief and family support' };
-        parts.push(`You also asked about ${state.supports.map(s => map[s]).join(', ')}.`);
+      const lines = [];
+      lines.push(`You are looking ${whoText}, located in ${where}.`);
+      lines.push(phaseText);
+
+      if (state.coverage === 'yes') {
+        lines.push('You told us you are covered by Canada’s publicly funded healthcare system.');
+      } else if (state.coverage === 'no') {
+        lines.push('You told us you are not covered by Canada’s publicly funded healthcare system or are unsure. We are showing general information and resources.');
       }
 
-      document.getElementById('summaryText').textContent = parts.join(' ');
+      document.getElementById('toldText').textContent = lines.join(' ');
 
-      // Eligibility list
-      const eligMap = {
-        healthcare: 'Eligible for publicly funded healthcare',
-        capacity: 'Able to make and communicate health decisions',
-        condition: 'Living with a serious illness, disease, or disability',
-        foreseeable: 'Natural death may be reasonably foreseeable'
+      const lookingList = document.getElementById('lookingList');
+      lookingList.innerHTML = '';
+
+      const lookingItems = [];
+      if (state.phase === 'considering') {
+        lookingItems.push('MAID assessments, witnesses or forms for your region.');
+      }
+      if (state.phase === 'learn') {
+        lookingItems.push('Plain-language information on how MAID works and other options.');
+      }
+      if (state.phase === 'caregiver') {
+        lookingItems.push('Guidance to help you support a loved one at end of life.');
+      }
+      if (state.phase === 'supporting') {
+        lookingItems.push('Resources to help a patient, client or someone else.');
+      }
+
+      const supportMap = {
+        endoflife: 'Information about hospice, palliative care and comfort-focused options.',
+        advance: 'Guidance for documenting wishes and talking with loved ones about plans.',
+        grief: 'Counselling, peer groups and other supports for grief, caregivers and families.'
       };
-      const eligList = document.getElementById('eligList');
-      eligList.innerHTML = '';
-      if (state.elig.length) {
-        state.elig.forEach(k => {
+      state.supports.forEach(key => {
+        if (supportMap[key]) lookingItems.push(supportMap[key]);
+      });
+
+      if (!lookingItems.length) {
+        lookingItems.push('General information on MAID and end-of-life care options.');
+      }
+
+      lookingItems.forEach(text => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        lookingList.appendChild(li);
+      });
+
+      const valuesList = document.getElementById('valuesList');
+      valuesList.innerHTML = '';
+      const valMap = {
+        autonomy: 'Autonomy and control',
+        comfort: 'Comfort and relief',
+        time: 'Time with loved ones',
+        peace: 'Peace of mind'
+      };
+
+      if (state.values.length) {
+        state.values.forEach(k => {
           const li = document.createElement('li');
-          li.textContent = eligMap[k];
-          eligList.appendChild(li);
+          li.textContent = valMap[k] || k;
+          valuesList.appendChild(li);
         });
       } else {
         const li = document.createElement('li');
-        li.textContent = 'No items selected in the self-check. A clinician can discuss eligibility with you.';
-        eligList.appendChild(li);
+        li.textContent = 'No specific priorities selected.';
+        valuesList.appendChild(li);
       }
 
-      // Forms and documents (placeholder; in production this is province-driven)
-      const formsList = document.getElementById('formsList');
-      formsList.innerHTML = '';
-      const p = state.province || 'Your province';
-      ;[
-        `${p} MAID request form (link placeholder)`,
-        `${p} Independent witness information (link placeholder)`,
-        `Advance care planning kit (national resource placeholder)`
-      ].forEach(txt => { const li = document.createElement('li'); li.textContent = txt; formsList.appendChild(li); });
-
-      // Supports
-      const supportList = document.getElementById('supportList');
-      supportList.innerHTML = '';
-      const allSupports = [];
-      if (state.supports.includes('palliative')) allSupports.push('Palliative care overview and how to access services');
-      if (state.supports.includes('advance')) allSupports.push('Advance care planning: guides and conversation templates');
-      if (state.supports.includes('grief')) allSupports.push('Grief supports: counselling and peer groups');
-      if (!allSupports.length) allSupports.push('Local hospice and palliative resources (directory placeholder)');
-      allSupports.forEach(txt => { const li = document.createElement('li'); li.textContent = txt; supportList.appendChild(li); });
-
-      // Values
-      const valuesList = document.getElementById('valuesList');
-      valuesList.innerHTML = '';
-      const valMap = { comfort: 'Comfort and relief', autonomy: 'Autonomy and control', time: 'Time with loved ones', spiritual: 'Spiritual or emotional peace' };
-      if (state.values.length) {
-        state.values.forEach(k => { const li = document.createElement('li'); li.textContent = valMap[k]; valuesList.appendChild(li); });
-      } else {
-        const li = document.createElement('li'); li.textContent = 'No priorities selected'; valuesList.appendChild(li);
-      }
-      document.getElementById('userNotes').textContent = state.notes ? `Notes: ${state.notes}` : '';
+      document.getElementById('userNotes').textContent = state.notes ? `Your note: ${state.notes}` : '';
     }
 
     nextBtn.addEventListener('click', () => {
@@ -439,11 +497,10 @@
       if (state.step === steps.length) buildResults();
     });
 
-    document.getElementById('btnPrint').addEventListener('click', () => window.print());
-    document.getElementById('btnSave').addEventListener('click', () => window.print()); // in browsers, print can save to PDF
-    document.getElementById('btnRestart').addEventListener('click', () => { location.reload(); });
+    document.getElementById('btnPrint')?.addEventListener('click', () => window.print());
+    document.getElementById('btnSave')?.addEventListener('click', () => window.print());
+    document.getElementById('btnRestart')?.addEventListener('click', () => { location.reload(); });
 
-    // Initialize
     setStep(1);
   </script>
 </body>
